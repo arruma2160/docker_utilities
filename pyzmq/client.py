@@ -7,7 +7,7 @@ import zmq
 
 
 PORT = 2222
-IP = "192.168.0.6"
+IP = "192.168.0.7"
 
 # Configuring client.
 context = zmq.Context()
@@ -16,7 +16,8 @@ server_url = 'tcp://{}:{}'.format(IP, PORT)
 socket.connect(server_url)
 
 # Sending data to server.
-md = {"branchname":"master"}
+md = {"test-json1":"message embedded into json",
+        "test-json2": " second message embedded into json"}
 socket.send_json(md)
 
 # Receiving answer from servers.

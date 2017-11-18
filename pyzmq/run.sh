@@ -2,14 +2,14 @@
 
 function usage() {
     echo ""
-    echo ""
-    echo "!!: WRONG USE OF $0:"
-    echo "!!: usage:"
-    echo "!!: ./run.sh server|client|help"
-    echo "!!:             server: runs server."
-    echo "!!:             client: runs client."
-    echo "!!:         just-build: runs client."
-    echo "!!:               help: shows this help."
+    echo "::: usage:"
+    echo "::: ./run.sh server|client|build-client-exe|build-server-exe|help"
+    echo "::: [-]  server:           runs server."
+    echo "::: [-]  client:           runs client."
+    echo "::: [-]  just-build:       runs client."
+    echo "::: [-]  build-client-exe: builds executable for client" 
+    echo "::: [-]  build-server-exe: builds executable for server"
+    echo "::: [-]  help:             shows this help."
     echo ""
     echo ""
 }
@@ -39,23 +39,42 @@ function docker_client() {
     docker run --name=client \
                --rm -v $(pwd):/code \
                docker_pyzmq \
-               python3 -u ./client.py
+               python3 -u client.py
+}
+
+function docker_installer() {
+    echo "===="
+    echo "==== Running client..."
+    echo "===="
+    docker run --name=client \
+               --rm -v $(pwd):/code \
+               docker_pyzmq \
+               pyinstaller --onefile $1
 }
 
 function main() {
     if [ "$#" -ne 1 ]; then
-        echo "[!!] Remember to pass parameter to this program: server | client | help"
+        echo ""
+        echo "!!: WRONG USE OF $0:"
         usage
+        echo "[!!] Remember to pass parameter to this program: server | client | help"
     fi
 
-    docker_build
-
     case "$1" in
-        "server") docker_server;;
-        "client") docker_client;;
-        "just-build") exit 0;;
-          "help") usage && exit 1;;
-               *) usage && exit 1;;
+        "server") 
+            docker_build && docker_server;;
+        "client") 
+            docker_build && docker_client;;
+        "build-client-exe") 
+            docker_build && docker_installer "./client.py";;
+        "build-server-exe") 
+            docker_build && docker_installer "./server.py";;
+        "just-build") 
+            docker_build && exit 0;;
+        "help") 
+            usage && exit 1;;
+        *) 
+            usage && exit 1;;
     esac
 
 }

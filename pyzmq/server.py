@@ -2,6 +2,7 @@ import time
 import threading
 import zmq
 import json
+from configuration import Configuration
 
 def worker_routine(worker_url, context=None):
     """Worker routine
@@ -37,8 +38,9 @@ def main():
     """Server routine
 
     """
+    conf = Configuration()
     url_worker = "inproc://workers"
-    url_server = "tcp://0.0.0.0:2222"
+    url_server = "tcp://0.0.0.0:{}".format(conf.port)
 
     context = zmq.Context.instance()
     routers = context.socket(zmq.ROUTER)

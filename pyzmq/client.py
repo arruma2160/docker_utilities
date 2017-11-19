@@ -2,26 +2,46 @@ from datetime import datetime
 import os
 import sys
 import time
-
 import zmq
 
+from configuration import Configuration
 
-PORT = 2222
-IP = "192.168.0.7"
+class Client:
+    def __init__(self, ip, port):
+        self._context = zmq.Context()
+        self._socket = self._context.socket(zmq.REQ)
+        self._serverIp = ip
+        self._serverPort = port
+
+    def connect(self):
+        server_url = 'tcp://{}:{}'.format(self._serverIp, 
+                                          self._serverPort) 
+        self._socket.connect(server_url)
+
+    def send_data(self, data):
+        if not isinstance (data, dict):
+            raise Exception("Data in non-dictionary format")
+        self._socket.send_json(data)
+
+    def recv_data(self):
+        return self._socket.recv_json()
+
+    def __del__(self):
+        self._socket.close()
+        self._context.term()
 
 # Configuring client.
-context = zmq.Context()
-socket = context.socket(zmq.REQ)
-server_url = 'tcp://{}:{}'.format(IP, PORT) 
-socket.connect(server_url)
+conf = Configuration()
+client = Client(conf.ip, conf.port)
+client.connect()
 
-# Sending data to server.
-md = {"test-json1":"message embedded into json",
-        "test-json2": " second message embedded into json"}
-socket.send_json(md)
+md = {
+    "msg1":"message one",
+    "msg2":"message two"
+}
+client.send_data(md)
 
-# Receiving answer from servers.
-res = socket.recv_json()
+res = client.recv_data()
 if res["status"] == "Ok":
     print("Received data on server")
     print("Status: {}".format(res["status"]))
@@ -30,5 +50,3 @@ elif res["status"] == "Error":
 else:
     print("Me no entender")
 
-socket.close()
-context.term()

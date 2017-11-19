@@ -36,7 +36,9 @@ function docker_client() {
     echo "===="
     echo "==== Running client..."
     echo "===="
-    docker run --name=client \
+    docker run -it -e DISPLAY=$DISPLAY \
+               -v /tmp/.X11-unix:/tmp/.X11-unix \
+               --name=client \
                --rm -v $(pwd):/code \
                docker_pyzmq \
                python3 -u client.py

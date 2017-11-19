@@ -26,6 +26,7 @@ RUN apt-get install -y software-properties-common \
 RUN apt-get install -y libzmq-dev
 RUN python3 -m pip install pyzmq
 RUN python3 -m pip install pyinstaller
+RUN apt-get install -y python3-pyqt5
 
 EXPOSE 2222
 

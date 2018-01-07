@@ -46,7 +46,7 @@ function docker_client() {
 
 function docker_installer() {
     echo "===="
-    echo "==== Running client..."
+    echo "==== Running installer..."
     echo "===="
     docker run --name=client \
                --rm -v $(pwd):/code \
@@ -58,7 +58,6 @@ function main() {
     if [ "$#" -ne 1 ]; then
         echo ""
         echo "!!: WRONG USE OF $0:"
-        usage
         echo "[!!] Remember to pass parameter to this program: server | client | help"
     fi
 

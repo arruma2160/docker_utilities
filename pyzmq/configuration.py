@@ -1,6 +1,6 @@
 class Configuration:
     _port = 2222
-    _ip = "192.168.0.7"
+    _ip = "192.168.0.5"
 
     @property
     def port(self):

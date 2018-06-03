@@ -4,3 +4,6 @@ build/
 *.spec
 GoogleTests/test/test_build/
 build/
+.sconsign.dblite
+*.o
+

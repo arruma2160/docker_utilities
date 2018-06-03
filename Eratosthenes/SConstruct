@@ -1,0 +1,20 @@
+import os
+
+env_main = Environment(CPPPATH=['include'])
+env_test = Environment(CPPPATH=['include'])
+
+srcs = ["src/main.cpp", "src/eratosthenes.cpp"]
+test = ["test/test_eratosthenes.cpp"]
+
+env_main.VariantDir(variant_dir="build/eratosthenes/", src_dir=os.curdir, duplicate=0)
+env_test.VariantDir(variant_dir="build/test/", src_dir=os.curdir, duplicate=0)
+
+env_main.Program(target="build/eratosthenes/eratosthenes", source=srcs)
+env_test.Program(target="build/test/test_eratosthenes", 
+                 source=test, 
+                 LIBPATH=["/usr/local/lib"], 
+                 LIBS=["pthread", "gtest"], 
+                 CPPPATH=[os.curdir])
+
+##env_test.Alias("test", "build/test/test_eratosthenes")
+##env_main.Alias("all", "build/eratosthenes/eratosthenes/eratosthenes")

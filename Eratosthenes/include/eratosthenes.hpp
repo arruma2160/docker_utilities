@@ -1,5 +1,6 @@
 #ifndef ERATOSTHENES_HPP_
 #define ERATOSTHENES_HPP_
+
 #include <vector>
 #include <set>
 
@@ -16,7 +17,7 @@ struct IncGenerator {
 // ---------------------------------
 // Prototypes
 
-std::vector<int> natural_numbers(int max);
+std::vector<int> natural_numbers(int max, int start=2);
 std::set<int> sieve_eratosthenes(int max);
 
 # endif

@@ -8,9 +8,9 @@ using std::set;
 //
 
 vector<int> 
-natural_numbers(int max) {
+natural_numbers(int max, int start) {
     vector<int> nat_nums(max-1);
-    IncGenerator inc(2);
+    IncGenerator inc(start);
     std::generate(nat_nums.begin(), nat_nums.end(), inc);
     return nat_nums;
 };

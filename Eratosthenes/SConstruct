@@ -1,20 +1,18 @@
 import os
 
-env_main = Environment(CPPPATH=['include'])
-env_test = Environment(CPPPATH=['include'])
+env = Environment(CXXFLAGS="-std=c++11", CPPPATH=["./include"])
+main_src = ["src/main.cpp", "src/eratosthenes.cpp"]
+test_src = ["test/test_eratosthenes.cpp", "src/eratosthenes.cpp"]
 
-srcs = ["src/main.cpp", "src/eratosthenes.cpp"]
-test = ["test/test_eratosthenes.cpp"]
+env.VariantDir(variant_dir="build/eratosthenes/", src_dir="./src", duplicate=0)
+env.VariantDir(variant_dir="build/test/", src_dir="./test", duplicate=0)
 
-env_main.VariantDir(variant_dir="build/eratosthenes/", src_dir=os.curdir, duplicate=0)
-env_test.VariantDir(variant_dir="build/test/", src_dir=os.curdir, duplicate=0)
-
-env_main.Program(target="build/eratosthenes/eratosthenes", source=srcs)
-env_test.Program(target="build/test/test_eratosthenes", 
-                 source=test, 
+env.Program(target="build/eratosthenes/eratosthenes", source=main_src)
+env.Program(target="build/test/test_eratosthenes", 
+                 source=test_src, 
                  LIBPATH=["/usr/local/lib"], 
-                 LIBS=["pthread", "gtest"], 
-                 CPPPATH=[os.curdir])
+                 LIBS=["gtest", "pthread"])
 
-##env_test.Alias("test", "build/test/test_eratosthenes")
-##env_main.Alias("all", "build/eratosthenes/eratosthenes/eratosthenes")
+env.Alias("test", "build/test/test_eratosthenes")
+env.Alias("main", "build/eratosthenes/eratosthenes")
+
